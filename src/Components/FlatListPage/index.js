@@ -4,7 +4,45 @@ import EmptyList from './EmptyList';
 import ItemContainer from './ItemContainer';
 
 const FlatListPage = () => {
-  const [data, setData] = useState([].sort((a, b) => a.isSelected - b.isSelected));
+  const [data, setData] = useState([
+    {id: 1, name: 'Banana', quantity: 10, isSelected: false},
+    {id: 2, name: 'Apple', quantity: 5, isSelected: false},
+    {id: 3, name: 'Orange', quantity: 6, isSelected: false},
+    {id: 4, name: 'Mango', quantity: 2, isSelected: false},
+    {id: 5, name: 'Beef', quantity: '2kg', isSelected: true},
+    {id: 6, name: 'Chicken', quantity: '1kg', isSelected: false},
+    {id: 7, name: 'Pork', quantity: '1kg', isSelected: false},
+    {id: 8, name: 'Fish', quantity: '3kg', isSelected: false},
+    {id: 9, name: 'Rice', quantity: '5kg', isSelected: true},
+    {id: 10, name: 'Noodle', quantity: 2, isSelected: true},
+    {id: 11, name: 'Bread', quantity: 10, isSelected: false},
+    {id: 12, name: 'Egg', quantity: 12, isSelected: false},
+    {id: 13, name: 'Milk', quantity: '3cx', isSelected: false},
+    {id: 14, name: 'Cheese', quantity: '200g', isSelected: false},
+    {id: 15, name: 'Butter', quantity: '500g', isSelected: false},
+    {id: 16, name: 'Water', quantity: 2, isSelected: false},
+    {id: 17, name: 'Coke', quantity: 12, isSelected: false},
+    {id: 18, name: 'Pepsi', quantity: 6, isSelected: false},
+    {id: 19, name: 'Sprite', quantity: 6, isSelected: true},
+    {id: 20, name: 'Fanta', quantity: 6, isSelected: false},
+    {id: 21, name: 'Tomato', quantity: '1kg', isSelected: false},
+    {id: 22, name: 'Potato', quantity: '1kg', isSelected: false},
+    {id: 23, name: 'Carrot', quantity: '500g', isSelected: false},
+    {id: 24, name: 'Onion', quantity: '500g', isSelected: false},
+    {id: 25, name: 'Cucumber', quantity: '250g', isSelected: false},
+    {id: 26, name: 'Lettuce', quantity: 1, isSelected: false},
+    {id: 27, name: 'Garlic', quantity: '500g', isSelected: true},
+    {id: 28, name: 'Ginger', quantity: '100g', isSelected: true},
+    {id: 29, name: 'Paprika', quantity: 1, isSelected: false},
+    {id: 30, name: 'Cabbage', quantity: '500g', isSelected: false},
+    {id: 31, name: 'Spinach', quantity: '400g', isSelected: false},
+    {id: 32, name: 'Broccoli', quantity: 2, isSelected: false},
+    {id: 33, name: 'Cauliflower', quantity: 1, isSelected: false},
+    {id: 34, name: 'Corn', quantity: 6, isSelected: false},
+    {id: 35, name: 'Pepper', quantity: 1, isSelected: false},
+    {id: 36, name: 'Chili', quantity: 1, isSelected: false},
+    {id: 37, name: 'Lemon', quantity: 12, isSelected: false},
+  ].sort((a, b) => a.isSelected - b.isSelected));
   const [itemName, setItemName] = useState('');
   const [quantity, setQuantity] = useState('');
 
