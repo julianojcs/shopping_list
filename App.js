@@ -1,5 +1,5 @@
 import {SafeAreaView} from 'react-native';
-import FlatListPage from "./src/Components/FlatListPage";
+import FlatListPage from './src/Components/FlatListPage';
 
 const App = () => {
   return (
