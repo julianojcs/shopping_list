@@ -1,22 +1,20 @@
 import React from 'react'
-import { View, Text, Switch, ToastAndroid, Pressable } from 'react-native'
-import * as styles from "./styles"
+import { View, Text, Switch, Pressable } from "react-native";
+import * as styles from "./styles";
+import Toast from "react-native-toast-message";
 
 const ItemContainer = ({item, onValueChange, onDelete}) => {
   const { name, quantity, isSelected } = item
 
-  const showToast = (itemName) => {
-    ToastAndroid.showWithGravity(
-      `${itemName} deleted!!!`,
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER
-    );
-  };
-
   const handleDelete = (item) => {
-    onDelete()
-    showToast(item.name)
-  }
+    onDelete();
+    Toast.show({
+      type: "success",
+      text1: "Successfully deleted!",
+      text2: `Item "${item.name}" deleted.`,
+      position: "bottom",
+    });
+  };
 
   return (
     <Pressable

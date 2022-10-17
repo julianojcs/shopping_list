@@ -6,11 +6,11 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
-  ToastAndroid,
 } from "react-native";
 import * as styles from "./styles";
 import EmptyList from "./EmptyList";
 import ItemContainer from "./ItemContainer";
+import Toast from "react-native-toast-message";
 
 const FlatListPage = () => {
   const [data, setData] = useState(
@@ -18,10 +18,6 @@ const FlatListPage = () => {
   );
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState("");
-
-  const showToast = (msg) => {
-    ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
-  };
 
   const selectedIds = useCallback(() => {
     return data.filter((item) => item.isSelected).map((item) => item.id);
@@ -59,8 +55,19 @@ const FlatListPage = () => {
       setItemName("");
       setQuantity("");
       Keyboard.dismiss();
+      Toast.show({
+        type: "success",
+        text1: "Successfully added!",
+        text2: `Item "${itemName}" added.`,
+        position: "bottom",
+      });
     } else {
-      showToast("Please enter item name and quantity");
+      Toast.show({
+        type: "error",
+        text1: "Warning!",
+        text2: "Please enter item name and quantity",
+        position: "bottom",
+      });
     }
   };
 
