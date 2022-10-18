@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from "react";
 import {
   Keyboard,
   FlatList,
@@ -6,66 +6,112 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  ActivityIndicator,
 } from "react-native";
 import * as styles from "./styles";
 import EmptyList from "./EmptyList";
 import ItemContainer from "./ItemContainer";
 import Toast from "react-native-toast-message";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 const FlatListPage = () => {
-  const [data, setData] = useState(
-    [].sort((a, b) => a.isSelected - b.isSelected)
-  );
-  const [itemName, setItemName] = useState("");
+  const [data, setData] = useState([]);
+  const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { getItem, setItem, removeItem } = useAsyncStorage(
+    "@shopping-list:items"
+  );
 
   const selectedIds = useCallback(() => {
     return data.filter((item) => item.isSelected).map((item) => item.id);
   }, [data]);
 
-  const handleSelectedIds = (selectedId) => {
+  const handleSelectedIds = async (selectedId) => {
     if (data.find((element) => element.id === selectedId)) {
-      const newData = data.map((element) => {
-        if (element.id === selectedId) {
-          element.isSelected = !element.isSelected;
-        }
-        return element;
-      });
-      setData(newData.sort((a, b) => a.isSelected - b.isSelected));
+      const newData = data
+        .map((element) => {
+          if (element.id === selectedId) {
+            element.isSelected = !element.isSelected;
+          }
+          return element;
+        })
+        .sort((a, b) => a.isSelected - b.isSelected);
+      setData(newData);
+      await setItem(JSON.stringify(newData));
     }
   };
 
-  const handleDelete = (selectedId) => {
-    if (data.find((element) => element.id === selectedId)) {
-      const newData = data.filter((element) => element.id !== selectedId);
-      setData(newData.sort((a, b) => a.isSelected - b.isSelected));
-    }
-  };
-
-  const handleAdd = () => {
-    if (itemName && quantity) {
-      const id =
-        data.length === 0 ? 1 : data.sort((a, b) => b.id - a.id)[0].id + 1;
-
-      const newData = [
-        ...data,
-        { id: id, name: itemName, quantity: quantity, isSelected: false },
-      ];
-      setData(newData.sort((a, b) => a.isSelected - b.isSelected));
-      setItemName("");
-      setQuantity("");
-      Keyboard.dismiss();
+  const handleDelete = async (selectedId) => {
+    if (!selectedId) {
+      removeItem();
+      setData([]);
       Toast.show({
         type: "success",
-        text1: "Successfully added!",
-        text2: `Item "${itemName}" added.`,
+        text1: "Data successfully deleted!",
+        text2: `Now your list is empty.`,
         position: "bottom",
       });
     } else {
+      let item;
+      let localData;
+      const response = await getItem();
+      if (response) {
+        localData = JSON.parse(response);
+      } else {
+        localData = [];
+      }
+      const newData = localData
+        .filter((element) => {
+          item = element;
+          return element.id !== selectedId;
+        })
+        .sort((a, b) => a.isSelected - b.isSelected);
+      setData(newData);
+      await setItem(JSON.stringify(newData));
+      Toast.show({
+        type: "success",
+        text1: "Successfully deleted!",
+        text2: `Item "${item?.name}" deleted.`,
+        position: "bottom",
+      });
+    }
+  };
+
+  const handleAdd = async () => {
+    try {
+      if (name === "") {
+        throw new Error("Item name is required!");
+      }
+      if (quantity === "") {
+        throw new Error("Quantity is required!");
+      }
+      if (data.find((element) => element.name === name)) {
+        throw new Error("Item already exists!");
+      }
+      const id =
+        data.length === 0 ? 1 : data.sort((a, b) => b.id - a.id)[0].id + 1;
+      const newData = [...data, { id, name, quantity, isSelected: false }].sort(
+        (a, b) => a.isSelected - b.isSelected
+      );
+      setData(newData);
+      await setItem(JSON.stringify(newData));
+
+      setName("");
+      setQuantity("");
+      Keyboard.dismiss();
+
+      Toast.show({
+        type: "success",
+        text1: "Successfully registered!",
+        text2: `Added ${quantity} of ${name}.`,
+        position: "bottom",
+      });
+    } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Warning!",
-        text2: "Please enter item name and quantity",
+        text1: "Registration Error.",
+        text2: `${error.message}.`,
         position: "bottom",
       });
     }
@@ -81,9 +127,38 @@ const FlatListPage = () => {
     );
   };
 
+  const handleFetchData = useCallback(async () => {
+    try {
+      let localData;
+      const response = await getItem();
+      if (response) {
+        localData = JSON.parse(response);
+      } else {
+        localData = [];
+      }
+      setData(localData);
+    } catch (error) {
+      if (error instanceof Error) {
+        Toast.show({
+          type: "error",
+          text1: "Error loading Data.",
+          text2: "The Data is corrupted! Please try again.",
+          position: "bottom",
+        });
+      }
+    }
+  }, []);
+
   useEffect(() => {
-    console.log("selectedIds", selectedIds());
-  }, [selectedIds]);
+    setLoading(true);
+    handleFetchData()
+      .catch((error) => {
+        console.log("error", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [handleFetchData]);
 
   return (
     <View style={styles.container}>
@@ -93,8 +168,8 @@ const FlatListPage = () => {
           <TextInput
             style={[styles.input, styles.inputName]}
             placeholder="Item name"
-            value={itemName}
-            onChangeText={(text) => setItemName(text)}
+            value={name}
+            onChangeText={(text) => setName(text)}
             keyboardType="default"
           />
           <TextInput
@@ -109,16 +184,34 @@ const FlatListPage = () => {
           <Text style={styles.buttonText}>Add to List</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        styles={{ flex: 1, height: "100%" }}
-        data={data}
-        onPress={(item) => handleSelectedIds(item.id)}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        extraData={selectedIds}
-        ListEmptyComponent={<EmptyList />}
-        horizontal={false}
-      />
+      {loading ? (
+        <View style={styles.listContainer}>
+          <ActivityIndicator size="large" color="#01579b" />
+        </View>
+      ) : (
+        <>
+          <FlatList
+            styles={{ flex: 1, height: "100%" }}
+            data={data}
+            onPress={(item) => handleSelectedIds(item.id)}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            extraData={selectedIds}
+            ListEmptyComponent={<EmptyList />}
+            horizontal={false}
+          />
+          {data.length > 0 && (
+            <View style={styles.deleteContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleDelete()}
+              >
+                <Text style={styles.buttonText}>Delete All</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </>
+      )}
     </View>
   );
 };

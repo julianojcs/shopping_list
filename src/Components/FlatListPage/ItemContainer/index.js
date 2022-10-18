@@ -3,26 +3,26 @@ import { View, Text, Switch, Pressable } from "react-native";
 import * as styles from "./styles";
 import Toast from "react-native-toast-message";
 
-const ItemContainer = ({item, onValueChange, onDelete}) => {
-  const { name, quantity, isSelected } = item
+const ItemContainer = ({ item, onValueChange, onDelete }) => {
+  const { name, quantity, isSelected } = item;
 
   const handleDelete = (item) => {
     onDelete();
-    Toast.show({
-      type: "success",
-      text1: "Successfully deleted!",
-      text2: `Item "${item.name}" deleted.`,
-      position: "bottom",
-    });
   };
 
   return (
     <Pressable
       onLongPress={() => handleDelete(item)}
       delayLongPress={800}
-      style={({ pressed }) => pressed ? styles.presseble : isSelected ? styles.containerSelected: styles.containerNotSelected}
+      style={({ pressed }) =>
+        pressed
+          ? styles.presseble
+          : isSelected
+          ? styles.containerSelected
+          : styles.containerNotSelected
+      }
     >
-    {({ pressed }) => {
+      {({ pressed }) => {
         return !pressed ? (
           <>
             <Switch
@@ -39,10 +39,10 @@ const ItemContainer = ({item, onValueChange, onDelete}) => {
           </>
         ) : (
           <Text style={styles.text}>Long press to Delete</Text>
-        )
+        );
       }}
     </Pressable>
-  )
-}
+  );
+};
 
 export default ItemContainer

@@ -9,6 +9,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7e0e0",
     height: "100%",
   },
+  listContainer: {
+    flex: 1,
+    flexBasis: "auto",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+    marginBottom: 10,
+  },
   addContainer: {
     display: "flex",
     flexDirection: "column",
@@ -16,6 +24,10 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#DD5353",
     borderRadius: 8,
+    marginBottom: 10,
+  },
+  deleteContainer: {
+    backgroundColor: "transparent",
     marginBottom: 10,
   },
   inputs: {
@@ -61,7 +73,9 @@ const styles = StyleSheet.create({
 });
 
 export const container = StyleSheet.compose(styles.container);
+export const listContainer = StyleSheet.compose(styles.listContainer);
 export const addContainer = StyleSheet.compose(styles.addContainer);
+export const deleteContainer = StyleSheet.compose(styles.deleteContainer);
 export const inputs = StyleSheet.compose(styles.inputs);
 export const input = StyleSheet.compose(styles.input);
 export const inputQuantity = StyleSheet.compose(styles.inputQuantity);

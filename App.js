@@ -8,7 +8,7 @@ const App = () => {
       <SafeAreaView>
         <FlatListPage />
       </SafeAreaView>
-      <Toast />
+      <Toast position="bottom" bottomOffset={20} visibilityTime={5000} />
     </>
   );
 };
