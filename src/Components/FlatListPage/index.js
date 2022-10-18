@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Text,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import * as styles from "./styles";
 import EmptyList from "./EmptyList";
@@ -19,6 +20,7 @@ const FlatListPage = () => {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { getItem, setItem, removeItem } = useAsyncStorage(
     "@shopping-list:items"
   );
@@ -42,16 +44,21 @@ const FlatListPage = () => {
     }
   };
 
+  const handleDeleteAll = async () => {
+    await removeItem();
+    setData([]);
+    setModalVisible(false);
+    Toast.show({
+      type: "success",
+      text1: "Data successfully deleted!",
+      text2: `Now your list is empty.`,
+      position: "bottom",
+    });
+  };
+
   const handleDelete = async (selectedId) => {
     if (!selectedId) {
-      removeItem();
-      setData([]);
-      Toast.show({
-        type: "success",
-        text1: "Data successfully deleted!",
-        text2: `Now your list is empty.`,
-        position: "bottom",
-      });
+      setModalVisible(true);
     } else {
       let item;
       let localData;
@@ -203,7 +210,7 @@ const FlatListPage = () => {
           {data.length > 0 && (
             <View style={styles.deleteContainer}>
               <TouchableOpacity
-                style={styles.button}
+                style={[styles.button, { backgroundColor: "#f44336" }]}
                 onPress={() => handleDelete()}
               >
                 <Text style={styles.buttonText}>Delete All</Text>
@@ -212,6 +219,35 @@ const FlatListPage = () => {
           )}
         </>
       )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Delete all data?</Text>
+            <View style={styles.buttonView}>
+              <TouchableOpacity
+                style={styles.buttonYes}
+                onPress={() => handleDeleteAll()}
+              >
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonNo}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
