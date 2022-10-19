@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
+import colors from "../../../../assets/colors";
 
 const styles = StyleSheet.create({
   container: {
     overflow: "hidden",
-    backgroundColor: "transparent",
+    backgroundColor: colors.transparent,
     flex: 1,
     flexBasis: "auto",
     alignItems: "center",
@@ -14,9 +15,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 36,
     fontWeights: "bold",
-    color: "#01579b",
+    color: colors.primary,
     padding: 10,
-    backgroundColor: "transparent",
+    backgroundColor: colors.transparent,
   },
 });
 

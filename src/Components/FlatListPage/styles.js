@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import colors from "../../../assets/colors";
 
 const styles = StyleSheet.create({
   container: {
@@ -6,7 +7,7 @@ const styles = StyleSheet.create({
     paddingStart: 15,
     paddingEnd: 15,
     paddingBottom: 5,
-    backgroundColor: "#f7e0e0",
+    backgroundColor: colors.darkWhite,
     height: "100%",
   },
   listContainer: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     padding: 10,
-    backgroundColor: "#DD5353",
+    backgroundColor: colors.primary,
     borderRadius: 8,
     marginBottom: 10,
   },
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   input: {
-    backgroundColor: "#f7e0e0",
+    backgroundColor: colors.darkWhite,
     padding: 6,
     borderRadius: 8,
     fontSize: 24,
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   button: {
-    backgroundColor: "#01579b",
+    backgroundColor: colors.secondary,
     justifyContent: "center",
     width: "100%",
     marginTop: 10,
@@ -60,13 +61,16 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#fff",
+    color: colors.textColor,
     textAlign: "center",
+  },
+  buttonDanger: {
+    backgroundColor: colors.danger,
   },
   text: {
     fontSize: 36,
     fontWeight: "600",
-    color: "#fff",
+    color: colors.textColor,
     textAlign: "center",
     marginBottom: 12,
   },
@@ -79,11 +83,11 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 10,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
     borderRadius: 8,
     padding: 10,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.darkGray,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     minWidth: 100,
-    backgroundColor: "#f44336",
+    backgroundColor: colors.danger,
     marginEnd: 5,
   },
   buttonNo: {
@@ -116,11 +120,11 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     minWidth: 100,
-    backgroundColor: "#2196F3",
+    backgroundColor: colors.secondary,
     marginStart: 5,
   },
   textStyle: {
-    color: "white",
+    color: colors.white,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -135,6 +139,7 @@ export const input = StyleSheet.compose(styles.input);
 export const inputQuantity = StyleSheet.compose(styles.inputQuantity);
 export const inputName = StyleSheet.compose(styles.inputName);
 export const button = StyleSheet.compose(styles.button);
+export const buttonDanger = StyleSheet.compose(styles.buttonDanger);
 export const buttonText = StyleSheet.compose(styles.buttonText);
 export const text = StyleSheet.compose(styles.text);
 

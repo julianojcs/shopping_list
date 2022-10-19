@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, Text, Switch, Pressable } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
 import * as styles from "./styles";
-import Toast from "react-native-toast-message";
+import colors from "../../../../assets/colors";
 
 const ItemContainer = ({ item, onValueChange, onDelete }) => {
   const { name, quantity, isSelected } = item;
@@ -26,9 +27,12 @@ const ItemContainer = ({ item, onValueChange, onDelete }) => {
         return !pressed ? (
           <>
             <Switch
-              trackColor={{ true: "#81b0ff", false: "#767577" }}
-              thumbColor={isSelected ? "#01579b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
+              trackColor={{
+                true: colors.lightSecondary,
+                false: colors.lightCarbon,
+              }}
+              thumbColor={isSelected ? colors.secondary : colors.darkWhite}
+              ios_backgroundColor={colors.lightCarbon}
               onValueChange={onValueChange}
               value={isSelected}
             />
@@ -36,6 +40,11 @@ const ItemContainer = ({ item, onValueChange, onDelete }) => {
               <Text style={[styles.text]}>{name}</Text>
               <Text style={[styles.text]}>{quantity}</Text>
             </View>
+            <Icon
+              style={[styles.icon]}
+              name={"trash-alt"}
+              onPress={() => handleDelete(item)}
+            />
           </>
         ) : (
           <Text style={styles.text}>Long press to Delete</Text>

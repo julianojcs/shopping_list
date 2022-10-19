@@ -14,6 +14,7 @@ import EmptyList from "./EmptyList";
 import ItemContainer from "./ItemContainer";
 import Toast from "react-native-toast-message";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import colors from "../../../assets/colors";
 
 const FlatListPage = () => {
   const [data, setData] = useState([]);
@@ -193,7 +194,7 @@ const FlatListPage = () => {
       </View>
       {loading ? (
         <View style={styles.listContainer}>
-          <ActivityIndicator size="large" color="#01579b" />
+          <ActivityIndicator size="large" color={colors.secondary} />
         </View>
       ) : (
         <>
@@ -210,7 +211,7 @@ const FlatListPage = () => {
           {data.length > 0 && (
             <View style={styles.deleteContainer}>
               <TouchableOpacity
-                style={[styles.button, { backgroundColor: "#f44336" }]}
+                style={[styles.button, styles.buttonDanger]}
                 onPress={() => handleDelete()}
               >
                 <Text style={styles.buttonText}>Delete All</Text>
